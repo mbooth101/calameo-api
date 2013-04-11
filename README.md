@@ -2,6 +2,10 @@
 
 Java API for the Calaméo document publishing platform.
 
+## Usage
+
+For detailed usage information and API documentation, see the [JavaDocs][].
+
 ## Build & Test
 
 The source can be checked out from git as follows:
@@ -21,5 +25,6 @@ Unit tests are skipped by default because they require the secret details of a C
 
 This project is licenced under the [Apache Software License, Version 2.0][ASL2].
 
+[JavaDocs]: http://mbooth101.github.io/calameo-api/apidocs/
 [Apache Maven]: http://maven.apache.org/
 [ASL2]: http://www.apache.org/licenses/LICENSE-2.0
