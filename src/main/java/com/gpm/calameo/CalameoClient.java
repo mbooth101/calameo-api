@@ -19,11 +19,19 @@ public interface CalameoClient {
 
   public CalameoConfig getConfig();
 
+  /*
+   * Publications
+   */
+
   public ItemList<Publication> getPublicationList(final int start, final int step) throws CalameoException;
 
-  public ItemList<Subscriber> getSubscriberList(final int start, final int step) throws CalameoException;
-
   public Publication getPublication(final String bookId) throws CalameoException;
+
+  /*
+   * Subscribers
+   */
+
+  public ItemList<Subscriber> getSubscriberList(final int start, final int step) throws CalameoException;
 
   public Subscriber getSubscriber(final String login) throws CalameoException;
 
@@ -31,13 +39,28 @@ public interface CalameoClient {
 
   public void deactivateSubscriber(final String login) throws CalameoException;
 
-  public Subscriber addSubscriber(final String login, final String password, final String firstName, final String lastName,
-      final String email, final boolean isActive, final String extras) throws CalameoException;
-
-  public Subscriber updateSubscriber(final String login, final String newLogin, final String password, final String firstName,
+  public Subscriber addSubscriber(final String login, final String password, final String firstName,
       final String lastName, final String email, final boolean isActive, final String extras) throws CalameoException;
 
+  public Subscriber updateSubscriber(final String login, final String newLogin, final String password,
+      final String firstName, final String lastName, final String email, final boolean isActive, final String extras)
+      throws CalameoException;
+
   public void deleteSubscriber(final String login) throws CalameoException;
+
+  /*
+   * Subscriber Single DRMs
+   */
+
+  public ItemList<SingleDrm> getSubscriberSingleDrmList(final String login, final int start, final int step)
+      throws CalameoException;
+
+  public SingleDrm addSubscriberSingleDrm(final String login, final String bookId, final String extras)
+      throws CalameoException;
+
+  /*
+   * Subscriber Sessions
+   */
 
   public Session authSubscriberSession(final String login) throws CalameoException;
 

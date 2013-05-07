@@ -35,10 +35,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.gpm.calameo.CalameoClient;
 import com.gpm.calameo.CalameoConfig;
 import com.gpm.calameo.CalameoException;
+import com.gpm.calameo.SingleDrm;
 import com.gpm.calameo.ItemList;
 import com.gpm.calameo.Publication;
 import com.gpm.calameo.Session;
@@ -61,6 +63,10 @@ public class CalameoClientImpl implements CalameoClient {
     return config;
   }
 
+  /*
+   * Publications
+   */
+
   @Override
   public ItemList<Publication> getPublicationList(final int start, final int step) throws CalameoException {
     Map<String, String> params = new HashMap<String, String>();
@@ -72,21 +78,25 @@ public class CalameoClientImpl implements CalameoClient {
   }
 
   @Override
+  public Publication getPublication(final String bookId) throws CalameoException {
+    Map<String, String> params = new HashMap<String, String>();
+    params.put("action", "API.getBookInfos");
+    params.put("book_id", bookId);
+    PublicationResponse response = executeRequest(PublicationResponse.class, params);
+    return response.getContent();
+  }
+
+  /*
+   * Subscribers
+   */
+
+  @Override
   public ItemList<Subscriber> getSubscriberList(final int start, final int step) throws CalameoException {
     Map<String, String> params = new HashMap<String, String>();
     params.put("action", "API.fetchSubscriptionSubscribers");
     params.put("start", Integer.toString(start));
     params.put("step", Integer.toString(step));
     SubscriberListResponse response = executeRequest(SubscriberListResponse.class, params);
-    return response.getContent();
-  }
-
-  @Override
-  public Publication getPublication(final String bookId) throws CalameoException {
-    Map<String, String> params = new HashMap<String, String>();
-    params.put("action", "API.getBookInfos");
-    params.put("book_id", bookId);
-    PublicationResponse response = executeRequest(PublicationResponse.class, params);
     return response.getContent();
   }
 
@@ -133,7 +143,8 @@ public class CalameoClientImpl implements CalameoClient {
 
   @Override
   public Subscriber updateSubscriber(final String login, final String newLogin, final String password,
-      final String firstName, final String lastName, final String email, final boolean isActive, final String extras) throws CalameoException {
+      final String firstName, final String lastName, final String email, final boolean isActive, final String extras)
+      throws CalameoException {
     Map<String, String> params = new HashMap<String, String>();
     params.put("action", "API.updateSubscriber");
     params.put("login", login);
@@ -155,6 +166,37 @@ public class CalameoClientImpl implements CalameoClient {
     params.put("login", login);
     executeRequest(VoidResponse.class, params);
   }
+
+  /*
+   * Subscriber Single DRMs
+   */
+
+  @Override
+  public ItemList<SingleDrm> getSubscriberSingleDrmList(final String login, final int start, final int step)
+      throws CalameoException {
+    Map<String, String> params = new HashMap<String, String>();
+    params.put("action", "API.fetchSubscriberDRMSingles");
+    params.put("start", Integer.toString(start));
+    params.put("step", Integer.toString(step));
+    SingleDrmListResponse response = executeRequest(SingleDrmListResponse.class, params);
+    return response.getContent();
+  };
+
+  @Override
+  public SingleDrm addSubscriberSingleDrm(final String login, final String bookId, final String extras)
+      throws CalameoException {
+    Map<String, String> params = new HashMap<String, String>();
+    params.put("action", "API.addSubscriberDRMSingle");
+    params.put("login", login);
+    params.put("book_id", bookId);
+    params.put("extras", extras);
+    SingleDrmResponse response = executeRequest(SingleDrmResponse.class, params);
+    return response.getContent();
+  }
+
+  /*
+   * Subscriber Sessions
+   */
 
   @Override
   public Session authSubscriberSession(final String login) throws CalameoException {
@@ -182,7 +224,21 @@ public class CalameoClientImpl implements CalameoClient {
     executeRequest(SessionResponse.class, params);
   }
 
-  private <T extends Response<?>> T executeRequest(final Class<T> responseType, final Map<String, String> params) throws CalameoException {
+  /**
+   * Internal method that actually does the work of making the request to Calaméo and
+   * parsing the response.
+   * 
+   * @param responseType
+   *          the class of type T that the response is expected to be
+   * @param params
+   *          a map of key/value pairs to be sent to Calaméo as query parameters
+   * @return the response object of type T, whose class was specified in the responseType
+   *         argument
+   * @throws CalameoException
+   *           if there was an error communicating with Calaméo
+   */
+  private <T extends Response<?>> T executeRequest(final Class<T> responseType, final Map<String, String> params)
+      throws CalameoException {
     HttpClient client = null;
     HttpGet get = null;
     InputStreamReader entity = null;
@@ -228,6 +284,9 @@ public class CalameoClientImpl implements CalameoClient {
       log.error(e.getMessage());
       throw new CalameoException(e);
     } catch (URISyntaxException e) {
+      log.error(e.getMessage());
+      throw new CalameoException(e);
+    } catch (JsonParseException e) {
       log.error(e.getMessage());
       throw new CalameoException(e);
     } finally {
