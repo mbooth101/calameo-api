@@ -43,15 +43,20 @@ public class ItemList<T> {
   @Override
   public String toString() {
     StringBuilder s = new StringBuilder();
-    for (T item : getItems()) {
-      if (s.toString().isEmpty()) {
-        s.append(String.format("{ Total: %s, Start: %d, Step: %d, Items: [ ", getTotal(), getStart(), getStep()));
-      } else {
-        s.append(", ");
+    final T[] items = getItems();
+    if (items != null) {
+      for (T item : getItems()) {
+        if (s.toString().isEmpty()) {
+          s.append(String.format("{ Total: %s, Start: %d, Step: %d, Items: [ ", getTotal(), getStart(), getStep()));
+        } else {
+          s.append(", ");
+        }
+        s.append(item.toString());
       }
-      s.append(item.toString());
+      s.append(" ] }");
+    } else {
+      s.append(String.format("{ Total: %s, Start: %d, Step: %d }", getTotal(), getStart(), getStep()));
     }
-    s.append(" ] }");
     return s.toString();
   }
 }
