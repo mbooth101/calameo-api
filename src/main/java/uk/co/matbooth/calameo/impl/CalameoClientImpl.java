@@ -177,6 +177,7 @@ public class CalameoClientImpl implements CalameoClient {
       throws CalameoException {
     Map<String, String> params = new HashMap<String, String>();
     params.put("action", "API.fetchSubscriberDRMSingles");
+    params.put("login", login);
     params.put("start", Integer.toString(start));
     params.put("step", Integer.toString(step));
     SingleDrmListResponse response = executeRequest(SingleDrmListResponse.class, params);
