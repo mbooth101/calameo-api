@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gpm.calameo.impl;
+package uk.co.matbooth.calameo.impl;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,18 +33,19 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import uk.co.matbooth.calameo.CalameoClient;
+import uk.co.matbooth.calameo.CalameoConfig;
+import uk.co.matbooth.calameo.CalameoException;
+import uk.co.matbooth.calameo.ItemList;
+import uk.co.matbooth.calameo.Publication;
+import uk.co.matbooth.calameo.Session;
+import uk.co.matbooth.calameo.SingleDrm;
+import uk.co.matbooth.calameo.Subscriber;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.gpm.calameo.CalameoClient;
-import com.gpm.calameo.CalameoConfig;
-import com.gpm.calameo.CalameoException;
-import com.gpm.calameo.SingleDrm;
-import com.gpm.calameo.ItemList;
-import com.gpm.calameo.Publication;
-import com.gpm.calameo.Session;
-import com.gpm.calameo.Subscriber;
 
 public class CalameoClientImpl implements CalameoClient {
   private final Log log = LogFactory.getLog(CalameoClientImpl.class);

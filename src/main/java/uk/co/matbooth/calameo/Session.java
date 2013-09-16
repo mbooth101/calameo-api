@@ -13,10 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gpm.calameo.impl;
+package uk.co.matbooth.calameo;
 
-import com.gpm.calameo.ItemList;
-import com.gpm.calameo.SingleDrm;
+public class Session {
+  private String ID;
+  private String SubscriptionID;
+  private String SubscriberLogin;
 
-class SingleDrmListResponse extends Response<ItemList<SingleDrm>> {
+  public Session() {
+  }
+
+  public String getId() {
+    return ID;
+  }
+
+  public String getSubscriptionId() {
+    return SubscriptionID;
+  }
+
+  public String getSubscriberLogin() {
+    return SubscriberLogin;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("{ ID: %s, Subscription ID: %s, Subscription Login: %s }", getId(), getSubscriptionId(), getSubscriberLogin());
+  };
 }

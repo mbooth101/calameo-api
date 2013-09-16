@@ -13,7 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gpm.calameo.impl;
+package uk.co.matbooth.calameo;
 
-class VoidResponse extends Response<Void> {
+public interface CalameoConfig {
+
+  public String getEndpoint();
+
+  public void setEndpoint(final String endpoint);
+
+  public String getKey();
+
+  public void setKey(final String key);
+
+  public String getSecret();
+
+  public void setSecret(final String secret);
+
+  public String getSubscription();
+
+  public void setSubscription(final String subscription);
+
+  public long getExpires();
+
+  public void setExpires(final long expires);
 }

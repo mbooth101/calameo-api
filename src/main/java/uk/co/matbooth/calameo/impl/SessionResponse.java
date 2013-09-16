@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gpm.calameo.impl;
+package uk.co.matbooth.calameo.impl;
 
-import com.gpm.calameo.Publication;
+import uk.co.matbooth.calameo.Session;
 
-class PublicationResponse extends Response<Publication> {
+class SessionResponse extends Response<Session> {
 }
